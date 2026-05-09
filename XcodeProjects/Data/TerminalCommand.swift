@@ -41,7 +41,7 @@ enum TerminalCommand {
             case .podDeintegrate: return "Pod deintegrate"
             case .removePodfileLock: return "Remove Podfile.lock"
             case .finder: return "Open in Finder"
-            case .openInTerminal: return "Open in Ghostty"
+            case .openInTerminal: return "Open in iTerm2"
             case .sourceTree: return "Open in Sourcetree"
             case .fork: return "Open in Fork"
             case .openWorkspace: return "Open Workspace"

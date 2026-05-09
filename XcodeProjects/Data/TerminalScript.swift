@@ -14,12 +14,13 @@ struct TerminalScript {
     var script: String {
         let scriptText =
         """
-        tell application "Ghostty"
+        tell application "iTerm"
             activate
-            set win to new window
-            set t to terminal 1 of selected tab of win
-            input text "\(command)" to t
-            send key "enter" to t
+            tell (create window with default profile)
+                tell current session
+                    write text "\(command)"
+                end tell
+            end tell
         end tell
         """
         return scriptText
