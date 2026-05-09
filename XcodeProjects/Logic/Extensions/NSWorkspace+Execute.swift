@@ -59,7 +59,7 @@ private extension NSWorkspace {
         if var errorMessage = error?["NSAppleScriptErrorBriefMessage"] as? String {
             if let errorNumber = error?["NSAppleScriptErrorNumber"] as? NSNumber,
                 errorNumber == NSNumber(integerLiteral: -1728) {
-                errorMessage = "Please open Terminal app"
+                errorMessage = "Please open Ghostty app"
             }
             NSWorkspace.showErrorAlert(withMessage: errorMessage)
         }

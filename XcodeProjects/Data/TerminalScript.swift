@@ -14,10 +14,12 @@ struct TerminalScript {
     var script: String {
         let scriptText =
         """
-        tell application "Terminal"
-        reopen
-        activate
-        \(command)
+        tell application "Ghostty"
+            activate
+            set win to new window
+            set t to terminal 1 of selected tab of win
+            input text "\(command)" to t
+            send key "enter" to t
         end tell
         """
         return scriptText
@@ -28,6 +30,6 @@ struct TerminalScript {
     }
 
     init(toRemovePath: String) {
-        self.command = "rm -rf \(toRemovePath)".wrappedInScript
+        self.command = "rm -rf \(toRemovePath)"
     }
 }

@@ -41,7 +41,7 @@ enum TerminalCommand {
             case .podDeintegrate: return "Pod deintegrate"
             case .removePodfileLock: return "Remove Podfile.lock"
             case .finder: return "Open in Finder"
-            case .openInTerminal: return "Open in Terminal"
+            case .openInTerminal: return "Open in Ghostty"
             case .sourceTree: return "Open in Sourcetree"
             case .fork: return "Open in Fork"
             case .openWorkspace: return "Open Workspace"
@@ -104,7 +104,7 @@ enum TerminalCommand {
         
         // script for aliases
         if let command = command, self == .alias(command: command) {
-            return TerminalScript(command: (command.wrappedInScript)).script
+            return TerminalScript(command: command).script
         }
 
         // script for other in terminal commands
@@ -112,16 +112,15 @@ enum TerminalCommand {
             var commandValue = command, let project = project else {
                 return nil
         }
-        let commandString = "\(openInTerminalCommand) \(project.path)"
-        var twoLinesScript = commandString.wrappedInScript
-        if self != .openInTerminal {
-            twoLinesScript.append("\n")
-            if self == .sourceTree || self == .fork {
-                commandValue += " \(project.path)"
-            } 
-            twoLinesScript.append(commandValue.wrappedInScript)
+        let cdCommand = "\(openInTerminalCommand)\(project.path)"
+        if self == .openInTerminal {
+            return TerminalScript(command: cdCommand).script
         }
-        return TerminalScript(command: twoLinesScript).script
+        if self == .sourceTree || self == .fork {
+            commandValue += " \(project.path)"
+        }
+        let fullCommand = "\(cdCommand) && \(commandValue)"
+        return TerminalScript(command: fullCommand).script
     }
 
     private func getScriptToRemove(file path: String?) -> String? {
@@ -144,8 +143,3 @@ extension TerminalCommand: Equatable {
     }
 }
 
-extension String {
-    var wrappedInScript: String {
-        "do script \"\(self)\" in front window"
-    }
-}
