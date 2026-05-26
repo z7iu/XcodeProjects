@@ -28,6 +28,9 @@ struct ProjectMenuView: View {
                 if NSWorkspace.shared.forkAppInstalled {
                     TerminalCommandButton(project: project, command: .fork)
                 }
+                if NSWorkspace.shared.codeBuddyCNAppInstalled {
+                    TerminalCommandButton(project: project, command: .openInCodeBuddyCN)
+                }
             }
 
             if project.hasCocoapods {

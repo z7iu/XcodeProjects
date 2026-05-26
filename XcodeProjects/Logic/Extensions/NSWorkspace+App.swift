@@ -16,4 +16,8 @@ extension NSWorkspace {
     var forkAppInstalled: Bool {
         (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.DanPristupov.Fork") != nil)
     }
+    
+    var codeBuddyCNAppInstalled: Bool {
+        (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.tencent.codebuddycn") != nil)
+    }
 }

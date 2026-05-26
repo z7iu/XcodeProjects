@@ -44,6 +44,12 @@ private extension NSWorkspace {
             case .openXcodeDerivedData:
                 guard let url = URL(string: directDerivedDataFolderPath) else { return }
                 NSWorkspace.shared.activateFileViewerSelecting([url])
+            case .openInCodeBuddyCN:
+                guard let path = project?.path else { return }
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", "CodeBuddy CN", path]
+                try? task.run()
             default:
                 break
         }
