@@ -12,36 +12,25 @@ struct TerminalScript {
     let command: String
 
     var script: String {
-        let scriptText =
         """
-        if application "Ghostty" is running then
-            tell application "Ghostty"
-                activate
-                if (count of windows) > 0 then
-                    set win to front window
-                    set t to new tab in win
-                    set term to focused terminal of selected tab of win
-                    input text "\(command)\n" to term
-                else
-                    delay 0.5
-                    set win to new window
-                    set term to focused terminal of selected tab of win
-                    input text "\(command)\n" to term
-                end if
-            end tell
-        else
-            tell application "Ghostty"
-                activate
+        set wasRunning to application "Ghostty" is running
+        tell application "Ghostty"
+            activate
+            if wasRunning and (count of windows) > 0 then
+                new tab in front window
+            else if wasRunning then
+                new window
+            else
                 repeat until (count of windows) > 0
                     delay 0.1
                 end repeat
-                set win to front window
-                set t to focused terminal of selected tab of win
-                input text "\(command)\n" to t
-            end tell
-        end if
+            end if
+            delay 0.5
+            set term to focused terminal of selected tab of front window
+            input text "\(command)" to term
+            send key "enter" to term
+        end tell
         """
-        return scriptText
     }
 
     init(command: String) {
