@@ -32,10 +32,12 @@ struct TerminalScript {
         else
             tell application "Ghostty"
                 activate
-                set win to new window
-                set t to terminal 1 of selected tab of win
-                input text "\(command)" to t
-                send key "enter" to t
+                repeat until (count of windows) > 0
+                    delay 0.1
+                end repeat
+                set win to front window
+                set t to focused terminal of selected tab of win
+                input text "\(command)\n" to t
             end tell
         end if
         """
