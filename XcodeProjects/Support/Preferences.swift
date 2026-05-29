@@ -161,6 +161,7 @@ extension Preferences {
     
     func addProjects(_ newProjects: [Project]) {
         projects.append(contentsOf: newProjects)
+        newProjects.forEach({ _branchs[$0] = Branch(path: $0.path) })
     }
 
     func moveProjects(from source: IndexSet, to destination: Int) {

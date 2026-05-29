@@ -45,7 +45,10 @@ private extension NSWorkspace {
                 guard let url = URL(string: directDerivedDataFolderPath) else { return }
                 NSWorkspace.shared.activateFileViewerSelecting([url])
             case .openInCodeBuddyCN:
-                guard let path = project?.path else { return }
+                guard var path = project?.path else { return }
+                if (path as NSString).lastPathComponent == "iphone2_0" {
+                    path = (path as NSString).deletingLastPathComponent
+                }
                 let task = Process()
                 task.launchPath = "/usr/bin/open"
                 task.arguments = ["-a", "CodeBuddy CN", path]
