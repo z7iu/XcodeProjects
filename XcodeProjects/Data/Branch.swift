@@ -21,14 +21,12 @@ class Branch: ObservableObject {
     }
     
     func update() {
-        // /Users/zqiu/Projects/lrts-ios/iphone2_0
-        let lastComponent = (path as NSString).lastPathComponent
+        let fm = FileManager.default
         let git: String
-        if lastComponent == "iphone2_0" {
-            // iPhone2_0 is the root project dir, go up one more level to find .git
-            git = (path as NSString).deletingLastPathComponent
-        } else {
+        if fm.fileExists(atPath: path + "/.git") {
             git = path
+        } else {
+            git = (path as NSString).deletingLastPathComponent
         }
         let ref = (try? String(contentsOfFile: git + "/.git/HEAD"))
         let bra = ref?.components(separatedBy: "heads/").last
