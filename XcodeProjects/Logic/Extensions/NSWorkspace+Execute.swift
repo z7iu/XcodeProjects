@@ -53,6 +53,18 @@ private extension NSWorkspace {
                 task.launchPath = "/usr/bin/open"
                 task.arguments = ["-a", "CodeBuddy CN", path]
                 try? task.run()
+            case .openInAndroidStudio:
+                guard let path = project?.path else { return }
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", "Android Studio", path]
+                try? task.run()
+            case .openInDevEcoStudio:
+                guard let path = project?.path else { return }
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", "DevEco-Studio", path]
+                try? task.run()
             default:
                 break
         }

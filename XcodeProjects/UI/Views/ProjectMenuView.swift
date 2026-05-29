@@ -31,6 +31,12 @@ struct ProjectMenuView: View {
                 if NSWorkspace.shared.codeBuddyCNAppInstalled {
                     TerminalCommandButton(project: project, command: .openInCodeBuddyCN)
                 }
+                if NSWorkspace.shared.androidStudioAppInstalled && project.isAndroidProject {
+                    TerminalCommandButton(project: project, command: .openInAndroidStudio)
+                }
+                if NSWorkspace.shared.devEcoStudioAppInstalled && project.isHarmonyProject {
+                    TerminalCommandButton(project: project, command: .openInDevEcoStudio)
+                }
             }
 
             if project.hasCocoapods {

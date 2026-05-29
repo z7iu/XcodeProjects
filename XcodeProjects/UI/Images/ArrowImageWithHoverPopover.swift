@@ -10,19 +10,23 @@ import SwiftUI
 
 struct ArrowImageWithHoverPopover: View {
     let project: Project
-    @State private var noXcodeProjectHover: Bool = false
+    @State private var noProjectHover: Bool = false
+
+    private var hasOpenableProject: Bool {
+        project.hasXcodeProject || project.isAndroidProject || project.isHarmonyProject
+    }
 
     var body: some View {
         ArrowImage()
-        .opacity(project.hasXcodeProject ? 1.0 : 0.1)
+        .opacity(hasOpenableProject ? 1.0 : 0.1)
         .onHover(perform: { hovered in
-            if !self.project.hasXcodeProject {
-                self.noXcodeProjectHover = hovered
+            if !self.hasOpenableProject {
+                self.noProjectHover = hovered
             }
         })
-        .popover(isPresented: $noXcodeProjectHover, content: {
+        .popover(isPresented: $noProjectHover, content: {
             VStack(alignment: .trailing, spacing: 6) {
-                Text("No Xcode project/workspace was found 😔")
+                Text("No Xcode/Android/Harmony project was found 😔")
             }
             .foregroundColor(Color(.secondaryLabelColor))
             .font(.system(size: 11))

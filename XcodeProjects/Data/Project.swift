@@ -91,5 +91,35 @@ extension Project {
 }
 
 extension Project {
+
+    var isAndroidProject: Bool {
+        FileManager.default.getAndroidProjectFrom(for: self) != nil
+    }
+
+    var isHarmonyProject: Bool {
+        FileManager.default.getHarmonyProjectFrom(for: self) != nil
+    }
+
+    enum ProjectType {
+        case xcode
+        case android
+        case harmony
+        case unknown
+    }
+
+    var projectType: ProjectType {
+        if hasXcodeProject || hasSwiftPackage {
+            return .xcode
+        } else if isAndroidProject {
+            return .android
+        } else if isHarmonyProject {
+            return .harmony
+        } else {
+            return .unknown
+        }
+    }
+}
+
+extension Project {
     static let dummy = Project(name: "DummyProject", path: "/AnyPath")
 }

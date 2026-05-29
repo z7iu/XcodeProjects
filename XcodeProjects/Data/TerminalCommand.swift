@@ -25,6 +25,8 @@ enum TerminalCommand {
     case finder
     case openInTerminal
     case openInCodeBuddyCN
+    case openInAndroidStudio
+    case openInDevEcoStudio
     case sourceTree
     case fork
     case openWorkspace
@@ -44,6 +46,8 @@ enum TerminalCommand {
             case .finder: return "Open in Finder"
             case .openInTerminal: return "Open in Ghostty"
             case .openInCodeBuddyCN: return "Open in CodeBuddy CN"
+            case .openInAndroidStudio: return "Open in Android Studio"
+            case .openInDevEcoStudio: return "Open in DevEco Studio"
             case .sourceTree: return "Open in Sourcetree"
             case .fork: return "Open in Fork"
             case .openWorkspace: return "Open Workspace"
@@ -60,7 +64,7 @@ enum TerminalCommand {
         switch self {
         case .podUpdate, .podInstall, .openInTerminal, .sourceTree, .fork, .clearXcodeDerivedData, .clearProjectDerivedData, .podDeintegrate, .removePodfileLock, .custom, .alias:
                 return .inTerminal
-            case .finder, .openWorkspace, .openXcodeDerivedData, .openSwiftPackage, .openInCodeBuddyCN:
+            case .finder, .openWorkspace, .openXcodeDerivedData, .openSwiftPackage, .openInCodeBuddyCN, .openInAndroidStudio, .openInDevEcoStudio:
                 return .justOpen
         }
     }
@@ -133,7 +137,7 @@ enum TerminalCommand {
 extension TerminalCommand: Equatable {
     static func ==(lhs: TerminalCommand, rhs: TerminalCommand) -> Bool {
         switch (lhs, rhs) {
-        case (.podInstall, .podInstall), (.podUpdate, .podUpdate), (.podDeintegrate, .podDeintegrate), (.removePodfileLock, .removePodfileLock), (.finder, .finder), (.openInTerminal, .openInTerminal), (.openInCodeBuddyCN, .openInCodeBuddyCN), (.sourceTree, .sourceTree), (.fork, .fork), (.openWorkspace, .openWorkspace), (.openSwiftPackage, .openSwiftPackage), (.clearXcodeDerivedData, .clearXcodeDerivedData), (.openXcodeDerivedData, .openXcodeDerivedData), (.clearProjectDerivedData, .clearProjectDerivedData):
+        case (.podInstall, .podInstall), (.podUpdate, .podUpdate), (.podDeintegrate, .podDeintegrate), (.removePodfileLock, .removePodfileLock), (.finder, .finder), (.openInTerminal, .openInTerminal), (.openInCodeBuddyCN, .openInCodeBuddyCN), (.openInAndroidStudio, .openInAndroidStudio), (.openInDevEcoStudio, .openInDevEcoStudio), (.sourceTree, .sourceTree), (.fork, .fork), (.openWorkspace, .openWorkspace), (.openSwiftPackage, .openSwiftPackage), (.clearXcodeDerivedData, .clearXcodeDerivedData), (.openXcodeDerivedData, .openXcodeDerivedData), (.clearProjectDerivedData, .clearProjectDerivedData):
                 return true
             case (.custom(let lhsCommand), .custom(let rhsCommand)):
                 return lhsCommand == rhsCommand

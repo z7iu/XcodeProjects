@@ -20,4 +20,13 @@ extension NSWorkspace {
     var codeBuddyCNAppInstalled: Bool {
         (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.tencent.codebuddycn") != nil)
     }
+
+    var androidStudioAppInstalled: Bool {
+        (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.google.android.studio") != nil)
+    }
+
+    var devEcoStudioAppInstalled: Bool {
+        (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.huawei.deveco-studio") != nil
+            || NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.huawei.DevEcoStudio") != nil)
+    }
 }

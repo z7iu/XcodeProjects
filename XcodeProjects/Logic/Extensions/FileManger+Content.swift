@@ -30,6 +30,17 @@ extension FileManager {
         filter(urls: contentsOf(project: project), byName: "Podfile")?.first
     }
 
+    func getAndroidProjectFrom(for project: Project) -> URL? {
+        filter(urls: contentsOf(project: project), byName: "build.gradle")?.first
+            ?? filter(urls: contentsOf(project: project), byName: "build.gradle.kts")?.first
+            ?? filter(urls: contentsOf(project: project), byName: "settings.gradle")?.first
+            ?? filter(urls: contentsOf(project: project), byName: "settings.gradle.kts")?.first
+    }
+
+    func getHarmonyProjectFrom(for project: Project) -> URL? {
+        filter(urls: contentsOf(project: project), byName: "build-profile.json5")?.first
+    }
+
     func getXcodeDerivedData(for project: Project) -> URL? {
         guard let urls = contentsOf(url: URL(string: directDerivedDataFolderPath)) else {
             return nil

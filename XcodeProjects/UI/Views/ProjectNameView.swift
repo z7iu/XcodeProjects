@@ -35,7 +35,14 @@ struct ProjectNameView: View {
             // open project
             Button(action: {
                 AppDelegate.closePopover()
-                NSWorkspace.execute(command: .openWorkspace, forProject: self.project)
+                switch self.project.projectType {
+                case .android:
+                    NSWorkspace.execute(command: .openInAndroidStudio, forProject: self.project)
+                case .harmony:
+                    NSWorkspace.execute(command: .openInDevEcoStudio, forProject: self.project)
+                default:
+                    NSWorkspace.execute(command: .openWorkspace, forProject: self.project)
+                }
             }) {
                 ArrowImageWithHoverPopover(project: self.project)
             }
