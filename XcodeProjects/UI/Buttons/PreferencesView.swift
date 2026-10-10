@@ -77,6 +77,7 @@ struct PreferencesView: View {
             
         }
         .menuButtonStyle(BorderlessButtonMenuButtonStyle())
+        .glassCircle(diameter: 28)
         .alert(isPresented: $showingRemoveAllProjectsAlert, content: {
             Alert(title: Text("Remove all projects"),
                   message: Text("You can't undo it later"),

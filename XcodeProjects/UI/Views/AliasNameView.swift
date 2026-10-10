@@ -19,7 +19,7 @@ struct AliasNameView: View {
             Spacer()
         }
         .frame(height: 40)
-        .background(RoundedCorners.left)
+        .legacyBackground(RoundedCorners.left)
         .modifier(OnHover(tl: 12, tr: 0, bl: 12, br: 0))
         
     }

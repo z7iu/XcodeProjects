@@ -21,8 +21,18 @@ struct OnHover: ViewModifier {
             .onHover(perform: { isHovered in
                 self.isHovered = isHovered
             })
-            .background(isHovered ?
-                RoundedCorners(color: Color.primary.opacity(0.2), tl: self.tl, tr: self.tr, bl: self.bl, br: self.br) :
-                RoundedCorners(color: Color.clear))
+            .background(hoverBackground)
+    }
+
+    @ViewBuilder
+    private var hoverBackground: some View {
+        if LiquidGlass.isAvailable {
+            RoundedRectangle(cornerRadius: LiquidGlass.cornerRadius, style: .continuous)
+                .fill(isHovered ? Color.primary.opacity(0.1) : Color.clear)
+        } else if isHovered {
+            RoundedCorners(color: Color.primary.opacity(0.2), tl: self.tl, tr: self.tr, bl: self.bl, br: self.br)
+        } else {
+            RoundedCorners(color: Color.clear)
+        }
     }
 }

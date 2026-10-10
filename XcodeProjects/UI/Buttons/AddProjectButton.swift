@@ -13,13 +13,7 @@ struct AddProjectButton: View {
     let action: (() -> Void)
 
     var body: some View {
-        Button(action: action) {
-            Image("add")
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 16, height: 16)
-                .foregroundColor(Color(NSColor.labelColor))
-        }.buttonStyle(BorderlessButtonStyle())
+        IconButton(imageName: "add", action: action)
     }
 }
 

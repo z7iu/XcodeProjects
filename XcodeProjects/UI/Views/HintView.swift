@@ -29,6 +29,7 @@ struct HintView: View {
                             self.preferences.hideHint()
                         }, label: {
                             CloseHintImage()
+                                .glassCircle(diameter: 22)
                         })
                         .buttonStyle(BorderlessButtonStyle())
                         .frame(width: 10, height: 10, alignment: .center)

@@ -14,21 +14,25 @@ struct ProjectCell: View {
 
     var body: some View {
         VStack {
-            HStack(spacing: 0) {
+            HStack(spacing: LiquidGlass.isAvailable ? 6 : 0) {
                 
                 ProjectNameView(project: self.project, branch: preferences.branch(project))
                     .environmentObject(preferences)
+                    .glassTile()
 
-                Divider()
-                    .frame(width: 2)
-                    .padding(0)
+                if !LiquidGlass.isAvailable {
+                    Divider()
+                        .frame(width: 2)
+                        .padding(0)
+                }
 
                 ProjectMenuView(project: self.project)
                     .environmentObject(preferences)
                     .frame(width: 40, height: 40, alignment: .center)
-                    .background(RoundedCorners.right )
+                    .legacyBackground(RoundedCorners.right)
                     .modifier(OnHover(tl: 0, tr: 12, bl: 0, br: 12))
                     .modifier(OnHoverText())
+                    .glassTile(interactive: true)
             }
 
         }
