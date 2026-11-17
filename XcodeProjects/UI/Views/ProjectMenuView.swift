@@ -28,6 +28,12 @@ struct ProjectMenuView: View {
                 if NSWorkspace.shared.forkAppInstalled {
                     TerminalCommandButton(project: project, command: .fork)
                 }
+                if NSWorkspace.shared.androidStudioAppInstalled && project.isAndroidProject {
+                    TerminalCommandButton(project: project, command: .openInAndroidStudio)
+                }
+                if NSWorkspace.shared.devEcoStudioAppInstalled && project.isHarmonyProject {
+                    TerminalCommandButton(project: project, command: .openInDevEcoStudio)
+                }
             }
 
             if project.hasCocoapods {

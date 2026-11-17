@@ -44,6 +44,18 @@ private extension NSWorkspace {
             case .openXcodeDerivedData:
                 guard let url = URL(string: directDerivedDataFolderPath) else { return }
                 NSWorkspace.shared.activateFileViewerSelecting([url])
+            case .openInAndroidStudio:
+                guard let path = project?.path else { return }
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", "Android Studio", path]
+                try? task.run()
+            case .openInDevEcoStudio:
+                guard let path = project?.path else { return }
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", "DevEco-Studio", path]
+                try? task.run()
             default:
                 break
         }

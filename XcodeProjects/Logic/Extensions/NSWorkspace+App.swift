@@ -16,4 +16,13 @@ extension NSWorkspace {
     var forkAppInstalled: Bool {
         (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.DanPristupov.Fork") != nil)
     }
+
+    var androidStudioAppInstalled: Bool {
+        (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.google.android.studio") != nil)
+    }
+
+    var devEcoStudioAppInstalled: Bool {
+        (NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.huawei.deveco-studio") != nil
+            || NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.huawei.DevEcoStudio") != nil)
+    }
 }
