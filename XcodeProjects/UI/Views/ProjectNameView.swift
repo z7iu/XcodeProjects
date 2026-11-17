@@ -38,6 +38,7 @@ struct ProjectNameView: View {
                 NSWorkspace.execute(command: .openWorkspace, forProject: self.project)
             }) {
                 ArrowImageWithHoverPopover(project: self.project)
+                    .glassCircle(diameter: 30)
             }
             .buttonStyle(BorderlessButtonStyle())
             .padding([.trailing], 5)
@@ -50,6 +51,7 @@ struct ProjectNameView: View {
                     NSWorkspace.execute(command: .openSwiftPackage, forProject: self.project)
                 }) {
                     PackageSwiftImage()
+                        .glassCircle(diameter: 30)
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 .padding([.trailing], 5)
@@ -59,7 +61,7 @@ struct ProjectNameView: View {
             Spacer().frame(width: 3)
         }
         .frame(height: 40)
-        .background(RoundedCorners.left)
+        .legacyBackground(RoundedCorners.left)
         .modifier(OnHover(tl: 12, tr: 0, bl: 12, br: 0))
     }
 }

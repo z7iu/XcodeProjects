@@ -13,12 +13,6 @@ struct AddCustomCommandButton: View {
     let action: (() -> Void)
 
     var body: some View {
-        Button(action: action) {
-            Image("terminal")
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 16, height: 16)
-                .foregroundColor(Color(NSColor.labelColor))
-        }.buttonStyle(BorderlessButtonStyle())
+        IconButton(imageName: "terminal", action: action)
     }
 }

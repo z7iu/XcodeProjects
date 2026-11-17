@@ -7,12 +7,14 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MainView: View {
 
     @State private var searchTerm = ""
     //@State private var listToShow: ListToDisplay = .projects
     @State private var listToShow: Int = 0
+    @State private var draggingProject: Project?
     @EnvironmentObject var preferences: Preferences
 
 //    enum ListToDisplay: Int {
@@ -27,17 +29,19 @@ struct MainView: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            HStack(spacing: 15) {
+            HStack(spacing: LiquidGlass.isAvailable ? 8 : 15) {
                 Spacer().frame(width: 0)
-                TextField("Search in projects", text: $searchTerm)
-                    .frame(width: 215)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                searchField
                 AddProjectButton(action: addProject)
                 AddCustomCommandButton(action: addCustomCommand)
                 PreferencesView()
-            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
+            }
+            .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
+            .glassContainer(spacing: 8)
 
-            Divider().padding([.top], 3)
+            if !LiquidGlass.isAvailable {
+                Divider().padding([.top], 3)
+            }
 
             if listToShow == 0 || preferences.showAliases == false {
                 if projects.isEmpty {
@@ -59,13 +63,29 @@ struct MainView: View {
                         if self.preferences.hintDisabled == false {
                             HintView().environmentObject(self.preferences)
                         }
-                        List {
-                            ForEach(projects) { project in
-                                ProjectCell(project: project).environmentObject(self.preferences)
+                        if LiquidGlass.isAvailable {
+                            glassList {
+                                ForEach(projects) { project in
+                                    ProjectCell(project: project).environmentObject(self.preferences)
+                                        .onDrag {
+                                            draggingProject = project
+                                            return NSItemProvider(object: project.id.uuidString as NSString)
+                                        }
+                                        .onDrop(of: [UTType.text], delegate: ProjectDropDelegate(target: project,
+                                                                                               projects: projects,
+                                                                                               dragging: $draggingProject,
+                                                                                               move: move))
+                                }
                             }
-                            .onMove(perform: move)
+                        } else {
+                            List {
+                                ForEach(projects) { project in
+                                    ProjectCell(project: project).environmentObject(self.preferences)
+                                }
+                                .onMove(perform: move)
+                            }
+                            .padding(0)
                         }
-                        .padding(0)
                     }
                 }
             } else {
@@ -86,9 +106,17 @@ struct MainView: View {
                             Spacer()
                         }
                     } else {
-                        List {
-                            ForEach(allAliases) { alias in
-                                AliasCell(alias: alias, completion: nil).environmentObject(self.preferences)
+                        if LiquidGlass.isAvailable {
+                            glassList {
+                                ForEach(allAliases) { alias in
+                                    AliasCell(alias: alias, completion: nil).environmentObject(self.preferences)
+                                }
+                            }
+                        } else {
+                            List {
+                                ForEach(allAliases) { alias in
+                                    AliasCell(alias: alias, completion: nil).environmentObject(self.preferences)
+                                }
                             }
                         }
                     }
@@ -107,6 +135,35 @@ struct MainView: View {
         }
     }
     
+    /// List 的每行是独立宿主视图，玻璃采样不到弹窗背景会垫一层灰底，所以 macOS 26 改用 ScrollView
+    private func glassList<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        ScrollView {
+            LazyVStack(spacing: 8) {
+                content()
+            }
+            .padding(EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 10))
+        }
+    }
+
+    @ViewBuilder
+    private var searchField: some View {
+        if LiquidGlass.isAvailable {
+            HStack(spacing: 6) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                TextField("Search in projects", text: $searchTerm)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+            .padding(.horizontal, 10)
+            .frame(width: 215, height: 28)
+            .glass(in: Capsule())
+        } else {
+            TextField("Search in projects", text: $searchTerm)
+                .frame(width: 215)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+    }
+
     func move(from source: IndexSet, to destination: Int) {
         if searchTerm.isEmpty {
             preferences.moveProjects(from: source, to: destination)
@@ -180,5 +237,30 @@ extension MainView {
         controller.showWindow(nil)
         
         AppDelegate.closePopover()
+    }
+}
+
+private struct ProjectDropDelegate: DropDelegate {
+    let target: Project
+    let projects: [Project]
+    @Binding var dragging: Project?
+    let move: (IndexSet, Int) -> Void
+
+    func dropEntered(info: DropInfo) {
+        guard let dragging = dragging, dragging != target,
+              let from = projects.firstIndex(of: dragging),
+              let to = projects.firstIndex(of: target) else { return }
+        withAnimation {
+            move(IndexSet(integer: from), to > from ? to + 1 : to)
+        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
+    }
+
+    func performDrop(info: DropInfo) -> Bool {
+        dragging = nil
+        return true
     }
 }

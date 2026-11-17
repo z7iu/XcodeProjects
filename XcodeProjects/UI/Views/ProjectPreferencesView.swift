@@ -49,6 +49,7 @@ struct ProjectPreferencesView: View {
                     NotificationCenter.default.post(name: .closePreferencesController, object: nil)
                 }
             }, label: { Text(saveButton) })
+            .glassButtonStyle(prominent: true)
             .disabled(newValue.isEmpty)
         }
     }
